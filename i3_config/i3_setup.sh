@@ -46,6 +46,9 @@ EOF
 # update gtk-3.0/settings.ini file
 sed -i -e "s/Sans 11/System San Francisco Display ${GTK_FONT_SIZE}/" $HOME/.config/gtk-3.0/settings.ini
 
+# install Rofi
+sudo add-apt-repository ppa:sj-sr/extra-packages
+sudo apt-get install rofi
 # NOTES-----
 # change .i3/config --> font pango:System San Francisco Display 10
 # install infanality [OPTIONAL]
