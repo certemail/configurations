@@ -1,0 +1,27 @@
+CC=gcc
+CFLAGS=-Wall -Wextra -masm=intel
+LIBS=-lssl -lcrypto
+TARGET=lab10_license_checker
+SRCS=${TARGET}.c
+OBJS=${SRCS:.c=.o}
+
+
+all:  ${TARGET}
+
+${TARGET}:  ${OBJS}
+	${CC} -o ${TARGET} ${OBJS} ${LIBS}
+
+${OBJS}:  ${SRCS}
+	${CC} ${CFLAGS} -c ${SRCS} 
+
+obfuscated: SRCS = ${TARGET}_obfuscated.c
+obfuscated: ${OBJS}
+	@echo "Building obfuscated..."
+	${CC} -o ${TARGET}_obfuscated ${OBJS} ${LIBS}
+	
+	@echo "Stripping symbolic information..."
+	strip --strip-all ${TARGET}_obfuscated
+
+.PHONY: clean
+clean:
+	rm -rf *.o ${TARGET} ${TARGET}_obfuscated
