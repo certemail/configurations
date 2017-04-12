@@ -1,0 +1,11 @@
+syntax on
+set nu
+set showmatch
+set hlsearch
+set incsearch
+set autoindent
+set shiftwidth=4
+set softtabstop=4
+set expandtab
+set laststatus=2
+map <F8> :w<CR>:make<CR><CR>
