@@ -8,4 +8,16 @@ set shiftwidth=4
 set softtabstop=4
 set expandtab
 set laststatus=2
+
+"---save and compile
 map <F8> :w<CR>:make<CR><CR>
+
+"---clear screen and run executable
+map <F9> :!clear; ./%:r<CR>
+
+"---save, clear screen, compile, and run only if successful build
+"map <F9> :w<CR>:!clear; make && echo && ./%:r<CR>
+
+"---save, clear screen, compile, and run only if successful build
+"---suppress echoing of Makefile commands to console
+"map <F9> :w<CR>:!clear; make -s && ./%:r<CR>
