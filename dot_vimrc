@@ -4,9 +4,9 @@ set showmatch
 set hlsearch
 set incsearch
 set autoindent
-set shiftwidth=4
-set softtabstop=4
-set expandtab
+set shiftwidth=4   "uncomment for editing Makefiles"
+set softtabstop=4  "uncomment for editing Makefiles"
+set expandtab      "uncomment for editing Makefiles"
 set laststatus=2
 
 "---save and compile
@@ -24,3 +24,8 @@ map <F9> :!clear; ./%:r<CR>
 
 "---save and run python program
 "map <F9> :w<CR>:!clear && python ./%<CR>
+
+
+"=====================================================
+"---reload VIMRC file after making changes   :source %
+"=====================================================
