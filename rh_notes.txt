@@ -1,9 +1,17 @@
 
-
-
-
 ----- BOOT / GRUB2
-* To make changes modify: /etc/default/grub
+* Boot order:
+    1) System firmware loads the boot loader
+    2) Boot loader loads its configuration from disk
+    3) Boot loader presents users with a menu
+    4) Kernel and initramfs are loaded from disk
+    5) Kernel initializes and launches /sbin/init from initramfs
+    6) Basic hardware initialization takes place
+    7) System root file system is mounted read-only on /sysroot
+    8) Root file system is switched and control is passed over to new systemd instance
+    9) All units for default target are started
+
+* To make changes only modify: /etc/default/grub
     # grub2-mkconifg -o /boot/grub2/grub.cfg
 
 * Recover lost root password:
@@ -18,6 +26,15 @@
 
     -NOTE: pre-built images may place multiple console= arguments to the kernel.
            when using rd.break, might need to reorder console= arguments if not getting prompt
+
+* Syntax of /boot/grub2/grub.cfg
+    -actual bootable entries are encoded inside of 'menuentry' blocks
+    -linux16 points to kernel to be loaded 
+    -initrd16 points to initramfs to be loaded
+    -'set root' lines inside 'menuentry' point to filesystem from which GRUB2 should load kernel and initramfs; e.g., (hd0,msdos1)
+
+* Repair corrupted boot loader:
+    # grub2-install [INSTALL_DEVICE]    // e.g., /dev/sda
 
 ----- SYSTEMD
 * Important targets:
@@ -53,5 +70,12 @@
    # journalctl -b -p err           // show only error in boot messages
    # journalctl -b-1                // show boot messages on previous boot ID (use neg num after -b) 
 
-# Diagnose and repair systemd boot issues:
+* Diagnose and repair systemd boot issues:
     # systemctl enable debug-shell  // spawn a root shell on TTY9 (Ctrl-Alt-F9); disable when done!!
+
+* Repairing file system errors in /etc/fstab at boot: 
+    # systemctl daemon-reload       // must run this when using automatic recovery shell so systemd reloads configuration after editing /etc/fstab
+    
+
+
+
