@@ -1,0 +1,57 @@
+
+
+
+
+----- BOOT / GRUB2
+* To make changes modify: /etc/default/grub
+    # grub2-mkconifg -o /boot/grub2/grub.cfg
+
+* Recover lost root password:
+   -interrupt boot at GRUB menu and press 'e'
+   -append 'rd.break' to linux16 command 
+   -Ctrl-x to boot system
+   -remount root /sysroot filesystem as read-write:
+        # mount -o remount,rw /sysroot
+        # chroot /sysroot
+        # passwd
+        # touch .autorelabel
+
+    -NOTE: pre-built images may place multiple console= arguments to the kernel.
+           when using rd.break, might need to reorder console= arguments if not getting prompt
+
+----- SYSTEMD
+* Important targets:
+    graphical.target                // supports multiple users, graphical, text-based login
+    multi-user.target               // supports multiple users, text-based login only
+    rescue.target                   // sulogin prompt, basic system initialization completed,root pwd required, (read-write)
+    emergency.target                // sulogin prompt, initramfs pivot complete and system root mounted on / (read-only), root pwd required
+
+* rd.break: stops startup process before the regular root filesystem is mounted (root pwd NOT needed)
+
+* Important directories:
+    /usr/lib/systemd/system             // system defaults - dont make changes here (can be overwritten)
+    /etc/systemd/system                 // make custom changes here
+
+* Important commands:
+# systemctl get-default
+# systemctl set-default [TARGET]
+# systemctl isolate [TARGET]
+# systemctl start [TARGET]            // if going to a target that just needs add services, isolate not necessary
+
+# systemctl mask [SERVICE]          // prevents service from ever being started (stronger than disable)
+# systemctl --failed                // troubleshooting -show failed services 
+# systemctl list-jobs               // troubleshooting - any jobs listed as running must complete before those listed as waiting can continue
+
+* Boot into different target, at GRUB menu, press 'e' and append:
+    systemd.unit=[DESIRED_TARGET]
+
+* Examine logs of previous failed boot, need to enable persistent journald logging
+   # mkdir -p /var/log/journal
+   # chown :systemd-journal /var/log/journal
+   
+   # journalctl -b                  // boot messages
+   # journalctl -b -p err           // show only error in boot messages
+   # journalctl -b-1                // show boot messages on previous boot ID (use neg num after -b) 
+
+# Diagnose and repair systemd boot issues:
+    # systemctl enable debug-shell  // spawn a root shell on TTY9 (Ctrl-Alt-F9); disable when done!!
