@@ -62,7 +62,8 @@
     grub> echo $root
 
 * To find or confirm partition where /boot directory is:
-    grub> ls (hd0,msdos1)/grub2/grub.cfg
+    grub> ls (hd0,msdos1)/grub2/grub.cfg        // or,
+    grub> search.file /grub2/grub.cfg
 
 * To find partition with / filesystem:
     grub> insmod lvm                        
