@@ -4,6 +4,15 @@ check current partitions:
     # lsblk                     // list block devices and nice summary
     # partprobe                 // push new changes to kernel, so re-read partition table
 
+
+find free disk space:
+    # df -hT
+    # findmnt
+    # findmnt -D                // imitate output of df
+
+find unallocated disk space:
+    # parted [DEVICE] print free
+
 creating file systems:
     # mkfs -t xfs /dev/vdb1
 
@@ -26,7 +35,6 @@ creating and managing swap space:
     # swapon -s                 // get summary of swap
     # free -h                   // check usage of swap
 
-
     -to add swap to /etc/fstab:
     UUID=xxxxxxxxx-xxxxx-xxxxxx-xxxxx   swap    swap    defaults    0  0
 
@@ -35,3 +43,12 @@ creating and managing swap space:
 
     -swap priority can be added in /etc/fstab using mount option: pri=[PRIORITY_LEVEL]
     UUID=xxxxxxxxx-xxxxx-xxxxxx-xxxxx   swap    swap    pri=1    0  0
+
+-repair filesystem:
+    # umount /var
+    # fsck -t xfs /dev/sda7
+    # mount /dev/sda7 /var
+
+-get filesystem information:
+    # dumpe2fs /dev/sda4
+    # dumpe2fs -h /dev/sda4 | grep features
