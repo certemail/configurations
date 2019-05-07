@@ -1,29 +1,27 @@
-
-check current partitions:
+-check current partitions:
     # cat /proc/partitions      // check current partitions
     # lsblk                     // list block devices and nice summary
     # partprobe                 // push new changes to kernel, so re-read partition table
 
-
-find free disk space:
+-find free disk space:
     # df -hT
     # findmnt
     # findmnt -D                // imitate output of df
 
-find unallocated disk space:
+-find unallocated disk space:
     # parted [DEVICE] print free
 
-creating file systems:
-    # mkfs -t xfs /dev/vdb1
+-creating file systems:
+    # mkfs -t xfs /dev/vdb1     // add a label: use -L [LABEL_NAME]
 
-mounting filesystems:
+-mounting filesystems:
     -use device block UUID (created and stored in superblock when fs is created
         # blkid [PARTITION]
 
     -check to ensure that it is entered properly in /etc/fstab:
         # mount -a
 
-creating and managing swap space:
+-creating and managing swap space:
     -create partition in fdisk/gdisk
     -set type of partition to "82 Linux Swap"
     -activate using: swapon [PARITION]
@@ -52,3 +50,12 @@ creating and managing swap space:
 -get filesystem information:
     # dumpe2fs /dev/sda4
     # dumpe2fs -h /dev/sda4 | grep features
+
+-troubleshooting:
+    # lsof [MOUNTPOINT]
+
+-fdisk parition codes:
+    82 -> swap
+    83 -> Linux
+    8e -> Linux LVM
+
