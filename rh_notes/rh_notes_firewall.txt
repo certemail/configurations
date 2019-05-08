@@ -1,0 +1,67 @@
+-firewalld classified incoming network traffic into zones
+-every packet that comes into the system will be checked for its source address
+    -if that source address is tied to a specific zone, then rules for that zone apply
+    -if a network interface is not associated with a zone, then default zone used
+
+-ensure that iptables is not running and firewalld is on:
+    # systemctl mask iptables
+    # systemctl mask iptables6
+    # systemctl status firewalld
+
+    # systemctl start firewalld
+    # systemctl enable firewalld
+
+-pre-defined zones:
+    # firewall-cmd --list-all-zones         // list zones and their settings
+
+    * by default, all zones permit:
+        1) incoming traffic which is part of a communication initiaed by the system
+        2) any outgoing traffic
+
+    * trusted:  allow all incoming traffic
+    * home:     allow ssh, mdns, ipp-client, samba-client, dhcpv6-client
+    * internal: allow ssh, mdns, ipp-client, samba-client, dhcpv6-client
+    * work:     allow ssh, ipp-client, dhcpv6
+    * public:   allow ssh, dhcpv6-client
+    * external: allow ssh (outgoing IPv4 forwarded is masqueraded to appear to originate from network iface)
+    * dmz:      allow ssh
+    * block:    reject all incoming traffic unless related to outgoing traffic
+    * drop:     drop ALL traffic and no ICMP response back
+
+    -firewalld.zones(5) man page
+
+-pre-defined services:
+    # firewall-cmd --get-services       // list all pre-defined services (ssh, http, https, etc.)
+
+-firewall-cmd:
+    -if [--zone=<ZONE>] is not specified, then uses default zone
+    
+    # firewall-cmd --get-default-zone
+    # firewall-cmd --set-default-zone=<ZONE>
+    # firewall-cmd --get-services                    // list pre-defined services
+    # firewall-cmd --get-active-zones                // list all zones currently in use with an interface or source tied to them
+    # firewall-cmd --add-source=<source>[/<MASK>]    // route all traffic from network/netmask to specified zone
+    # firewall-cmd --remove-source=<source>[/<MASK>] // remove rule routing traffic from source to zone
+    # firewall-cmd --add-interface=<INTERFACE>       // route all traffic from interface to zone
+    # firewall-cmd --add-port=<PORT/PROTOCOL>        // allow traffic to PORT/PROTOCOL
+    # firewall-cmd --remove-service=<SERVICE>        // remove service from allowed list
+    # firewall-cmd --remove-port=<PORT/PROTOCOL>     // remove PORT/PROTOCOL from allowed list
+    # firewall-cmd --permanent                       // permanent change (only after reload or reboot)
+    # firewall-cmd --reload                          // drop runtime configuration and apply persistent config
+
+-example:
+    -set default zone to "dmz", all traffic coming from 192.168.0.0/24 assigned to internal zone,
+     and network ports for mysql opened on internal zone
+
+     # firewall-cmd --set-default-zone=dmz
+     # firewall-cmd --permanent --zone=internal --add-source=192.168.0.0/24
+     # firewall-cmd --permanent --zone=internal --add-service=mysql
+     # firewall-cmd --reload
+
+-firewalld services are defined in XML files in:
+    /usr/lib/firewalld/services/            // do NOT modify (system default)
+    /etc/firewalld/services/                // if creating own custom service, add it here
+
+-GUI firewall
+    # yum install firewall-config
+    # firewall-config

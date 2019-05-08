@@ -45,6 +45,11 @@ logical volume (LV): created from physical extents in a volume group
     /dev/mapper/VG-LV
     /dev/VG/LV
 
+-reduce a logical volume:
+    - lvreduce not supported for xfs filesystems, only for ext4
+
 -other commands:
     # lvmdiskscan
     # {pv,vg,lv}scan
+
+-use {vg,lv}extend --help
