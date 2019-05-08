@@ -1,0 +1,50 @@
+physical device: block device that could be a whole disk or partition
+physical volume (PV): used to register underlying physical devices for use in volume group
+volume group (VG): pool of storage made up of 1 or more PVs
+logical volume (LV): created from physical extents in a volume group
+
+-create a logical volume:
+    # fdisk /dev/vda                                    // partition disk (use 0x8e) for LVM
+    # partprobe
+    # pvcreate /dev/vda1 /dev/vda2                      // label partitions for use as LVM
+    # vgcreate vgdata /dev/vda1 /dev/vda2               // create volume group from vda1, vda2
+    # lvcreate -n mylogvol -L 500M vg-data              // create logical volume
+    # mkfs -t xfs /dev/vgdata/mylogvol                  // create filesystem
+
+    lvcreate -L 500M  : size to exactly 500MiB
+    lvcreate -l 500   : size to exactly 500 extents
+
+-extending volume group:
+    # fdisk /dev/vdb2
+    # pvcreate /dev/vdb2
+    # vgextend vgdata /dev/vdb2                         // extend vol group by size of the PV
+
+-reducing a volume group:
+    # pvmove /dev/vdb2                                  // relocate all extents in use on the /dev/vdb2 PV to other PVs in the volume group
+    # vgreduce /dev/vdb2                                // remove PV from the volume group so can be added to another volume group
+
+    -note: backup in case of power failure for chance pvmove is interrupted
+    -note: alternative to vgreduce can be: pvremove (permanently remove device or partition from being a PV)
+
+-extend a logical volume:
+    # vgs vgdata                                        // verify enough space in volume group
+    # lvextend -L +500M -r /dev/vgdata/mylogvol         // increase size by 500 MiB and also grow filesystem ("-r")
+
+    -note: alternatively, can use for growing:
+        * xfs:  xfs_growfs [MOUNTPOINT]  (when doing this, LV must be mounted)
+        * ext4: resize2fs  [LOGICAL_VOL] 
+
+    -note:
+        * lvextend -l  500      // resize by EXACTLY 500 extents
+        * lvextend -l +500      // add 500 extents to the current LV
+        * lvextend -L  500M     // resize by EXACTLY 500 MiB
+        * lvextend -L +500M     // add 500 MiB to the current LV
+        * lvextend -l +50%FREE  // add 50% of the current free space in the VG to LV
+
+-logical volumes can be listed either as:
+    /dev/mapper/VG-LV
+    /dev/VG/LV
+
+-other commands:
+    # lvmdiskscan
+    # {pv,vg,lv}scan
