@@ -33,10 +33,17 @@
     -actual bootable entries are encoded inside of 'menuentry' blocks
     -linux16 points to kernel to be loaded 
     -initrd16 points to initramfs to be loaded
-    -'set root' lines inside 'menuentry' point to filesystem from which GRUB2 should load kernel and initramfs; e.g., (hd0,msdos1)
+    -'set root' inside 'menuentry' point to fs from which GRUB2 loads kernel / initramfs; e.g., (hd0,msdos1)
 
 * Repair corrupted boot loader:
     # grub2-install [INSTALL_DEVICE]    // e.g., /dev/sda
+
+
+
+
+
+
+
 
 * Reinstall GRUB2 (if grub2-mkconfig fails)
     - list and remove all GRUB2 configuration and script files:
@@ -76,19 +83,21 @@
     - Press 'c' for command line
     grub> insmod lvm
     grub> ls
-    grub> set root=(lvm/rhel-root)                                                          // device containing root filesystem
-    grub> linux16 (hd0,msdos1)/vmlinuz-3.10.0.123.e17.x86_64 root=/dev/mapper/rhel-root     // specify kernel and root directory partition
-    grub> initrd16 (hd0,msdos1)/initramfs-3.10.0.123.e17.x86_64.img                         // specify intramfs
+    grub> set root=(lvm/rhel-root)                                                      // device containing root fs 
+    grub> linux16 (hd0,msdos1)/vmlinuz-3.10.0.123.e17.x86_64 root=/dev/mapper/rhel-root // kernel & fs root partition
+    grub> initrd16 (hd0,msdos1)/initramfs-3.10.0.123.e17.x86_64.img                     // intramfs
     grub> boot
+
+
 
 
 
 ----- SYSTEMD
 * Important targets:
-    graphical.target                // supports multiple users, graphical, text-based login
-    multi-user.target               // supports multiple users, text-based login only
-    rescue.target                   // sulogin prompt, basic system initialization completed,root pwd required, (read-write)
-    emergency.target                // sulogin prompt, initramfs pivot complete and system root mounted on / (read-only), root pwd required
+    graphical.target      // supports multiple users, graphical, text-based login
+    multi-user.target     // supports multiple users, text-based login only
+    rescue.target         // sulogin, basic system initialization,root pwd required, (rw)
+    emergency.target      // sulogin, initramfs pivot done and sys root mounted on / (ro), root pwd req
 
 * rd.break: stops startup process before the regular root filesystem is mounted (root pwd NOT needed)
 
@@ -104,7 +113,7 @@
     
     # systemctl mask [SERVICE]          // prevents service from ever being started (stronger than disable)
     # systemctl --failed                // troubleshooting -show failed services 
-    # systemctl list-jobs               // troubleshooting - any jobs listed as running must complete before those listed as waiting can continue
+    # systemctl list-jobs               // any jobs listed as running must complete before those waiting can continue
 
 * Boot into different target, at GRUB menu, press 'e' and append:
     systemd.unit=[DESIRED_TARGET]
@@ -121,5 +130,6 @@
     # systemctl enable debug-shell  // spawn a root shell on TTY9 (Ctrl-Alt-F9); disable when done!!
 
 * Repairing file system errors in /etc/fstab at boot: 
-    # systemctl daemon-reload       // must run this when using automatic recovery shell so systemd reloads configuration after editing /etc/fstab
+    # systemctl daemon-reload       // must run this when using automatic recovery shell so systemd reloads 
+                                       configuration after editing /etc/fstab
     
