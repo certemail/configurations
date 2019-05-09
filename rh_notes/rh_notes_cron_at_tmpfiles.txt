@@ -44,6 +44,7 @@
 
 
 
+
 -----CROND-----
 -installed using "cronie" package
 -commands that output to the console will attempt to email user
@@ -87,6 +88,10 @@
     0       9       *       *       1-5 [CMD]   // every workday (mon-fri) at 9am
     58      23      *       *       1-5 [CMD]   // every workday at 2 minutes before midnight
 
+
+
+
+
 -system-level cronjobs:
    * not defined using crontab, but configured in a set of configuration files
    * contains extra field between "Day-of-Week" and Command (specifies user under which job should run)
@@ -96,9 +101,12 @@
 
 -pre-defined system-level jobs - anacron (helper service):
     * /etc/cron.{hourly,daily,weekly,monthly}/  // directory contains executable scripts (chmod +x)
+
     * "run-parts" command executes pre-defined system jobs
+
     * /etc/cron.d/0hourly
         - run-parts --> /etc/cron.d/hourly/*
+
     * /etc/anacrontab:
         - specifies random delay and other settings
         - run-parts --> /etc/cron.d/{daily,weekly,monthly}/*
