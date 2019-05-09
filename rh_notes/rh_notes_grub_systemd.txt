@@ -48,7 +48,7 @@
 * Reinstall GRUB2 (if grub2-mkconfig fails)
     - list and remove all GRUB2 configuration and script files:
     # rpm -qc grub2-tools
-    #/etc/default/grub
+       /etc/default/grub
        /etc/grub.d/00_header
        /etc/grub.d/01_users
        /etc/grub.d/10_linux
@@ -83,7 +83,7 @@
     - Press 'c' for command line
     grub> insmod lvm
     grub> ls
-    grub> set root=(lvm/rhel-root)                                                      // device containing root fs 
+    grub> set root=(lvm/rhel-root)                                                      // device w/ root fs 
     grub> linux16 (hd0,msdos1)/vmlinuz-3.10.0.123.e17.x86_64 root=/dev/mapper/rhel-root // kernel & fs root partition
     grub> initrd16 (hd0,msdos1)/initramfs-3.10.0.123.e17.x86_64.img                     // intramfs
     grub> boot
