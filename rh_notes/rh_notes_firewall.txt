@@ -7,12 +7,11 @@
     # systemctl mask iptables
     # systemctl mask iptables6
     # systemctl status firewalld
-
     # systemctl start firewalld
     # systemctl enable firewalld
 
--pre-defined zones:
-    # firewall-cmd --list-all-zones         // list zones and their settings
+-pre-defined zones (firewalld.zones(5) man page):
+    # firewall-cmd --list-all-zones            		// list zones and their settings
 
     * by default, all zones permit:
         1) incoming traffic which is part of a communication initiaed by the system
@@ -27,19 +26,15 @@
     * dmz:      allow ssh
     * block:    reject all incoming traffic unless related to outgoing traffic
     * drop:     drop ALL traffic and no ICMP response back
-
-    -firewalld.zones(5) man page
-
+  
 -pre-defined services:
-    # firewall-cmd --get-services       // list all pre-defined services (ssh, http, https, etc.)
+    # firewall-cmd --get-services                    // list all pre-defined services (ssh, http, https, etc.)
 
--firewall-cmd:
-    -if [--zone=<ZONE>] is not specified, then uses default zone
-    
+-firewall-cmd:                                       // if [--zone=<ZONE>] is not specified, then uses default zone                                
     # firewall-cmd --get-default-zone
     # firewall-cmd --set-default-zone=<ZONE>
     # firewall-cmd --get-services                    // list pre-defined services
-    # firewall-cmd --get-active-zones                // list all zones currently in use with an interface or source tied to them
+    # firewall-cmd --get-active-zones                // list all zones in use w/ an interface or source tied to them
     # firewall-cmd --add-source=<source>[/<MASK>]    // route all traffic from network/netmask to specified zone
     # firewall-cmd --remove-source=<source>[/<MASK>] // remove rule routing traffic from source to zone
     # firewall-cmd --add-interface=<INTERFACE>       // route all traffic from interface to zone

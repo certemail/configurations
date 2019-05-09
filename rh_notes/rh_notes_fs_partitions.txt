@@ -5,8 +5,7 @@
 
 -find free disk space:
     # df -hT
-    # findmnt
-    # findmnt -D                // imitate output of df
+    # findmnt      				// use "-D" to imitate output of df
 
 -find unallocated disk space:
     # parted [DEVICE] print free

@@ -20,8 +20,8 @@ logical volume (LV): created from physical extents in a volume group
     # vgextend vgdata /dev/vdb2                         // extend vol group by size of the PV
 
 -reducing a volume group:
-    # pvmove /dev/vdb2                                  // relocate all extents in use on the /dev/vdb2 PV to other PVs in the volume group
-    # vgreduce /dev/vdb2                                // remove PV from the volume group so can be added to another volume group
+    # pvmove /dev/vdb2            // relocate all extents in use on the /dev/vdb2 PV to other PVs in the volume group
+    # vgreduce /dev/vdb2          // remove PV from the volume group so can be added to another volume group
 
     -note: backup in case of power failure for chance pvmove is interrupted
     -note: alternative to vgreduce can be: pvremove (permanently remove device or partition from being a PV)
