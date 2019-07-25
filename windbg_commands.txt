@@ -1,0 +1,39 @@
+--- SYMBOLS ---
+set _NT_SYMBOL_PATH
+
+!sym noisy                                                                  // more info on retrieval
+
+- ways to set symbol path:
+    _NT_SYMBOL_PATH                                                         // environment variable
+    .sympath SRV*C:\symbols\*http://msdl.microsoft.com/download/symbols     //symbol path - store in C:\symbols
+   
+- download symbols from cmd line for a specific DLL:
+    symchk.exe "C:\Windows\system32\kernel32.dll" 
+        /s SRV*C:\symbols\*http://msdl.microsoft.com/download/symbols
+
+.reload /f                                                                  // reload symbols
+
+
+--- COMMANDS ---
+sxe ld [DLL_NAME]                                                       // break on module load
+
+--- BREAKPOINTS ---
+bp $exentry                     // break on entry point
+bl                              // list breakpoints
+bc [NUM]                        // clear break point
+!address                        // memory map
+!address 0x77112233             // information on specific memory addr
+!dh 0xfd0000                    // PE header information
+lm                              // list loaded modules
+x kernel32!Virtual*             // browse symbols for module using wildcard
+k                               // view call stack
+!findstack kernel32             // find string "kernel32" in all threads' stacks
+
+dt -r ntdll!_IMAGE_NT_HEADERS   // show structure fields for symbol
+
+eb $peb+0x2 0x0                 // edit byte at PEB offset of 2 bytes and set to 0 (thwart anti-debug)
+
+.writemem C:\out.bin START END  // write out to disk memory from start to end address 
+                                   use !address to get end range of memory segment
+
+s -a START END http             // search for ASCII string "http" in start end region
