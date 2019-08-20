@@ -21,6 +21,8 @@ sxe ld [DLL_NAME]                                                       // break
 bp $exentry                     // break on entry point
 bl                              // list breakpoints
 bc [NUM]                        // clear break point
+bm ws2_32!*                     // can use wild card to set multiple breakpoints
+
 !address                        // memory map
 !address 0x77112233             // information on specific memory addr
 !dh 0xfd0000                    // PE header information
@@ -36,4 +38,14 @@ eb $peb+0x2 0x0                 // edit byte at PEB offset of 2 bytes and set to
 .writemem C:\out.bin START END  // write out to disk memory from start to end address 
                                    use !address to get end range of memory segment
 
-s -a START END http             // search for ASCII string "http" in start end region
+--- SEARCH MEMORY ---
+s -a START END http             // search memory for ASCII string "http" in start end region
+s -a 0x12345 L100 http          // start search at address 0x12345 and end 100 bytes
+
+? 0n123                         // display "123" as hexadecimal
+
+dd poi(0x12345)                 // dereference what address 0x12345 points to
+dd poi(esp)                     // dereference what is on the top of the stack
+
+
+.restart                        // restart exe (only if launched by WinDbg originally)
