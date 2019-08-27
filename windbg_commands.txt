@@ -49,3 +49,9 @@ dd poi(esp)                     // dereference what is on the top of the stack
 
 
 .restart                        // restart exe (only if launched by WinDbg originally)
+
+sxe -c "k;g;" e06d7363          // configure exceptions such that we break on error e06d7363                                      // execute the command k;g; (print traceback in that thread
+                                // and then continue
+
+.logopen [PATH_TO_LOG_FILE]     // record console output to a logfile
+.logclose
