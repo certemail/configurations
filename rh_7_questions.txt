@@ -1,0 +1,9 @@
+rpm -qc grub2-tools
+rm -rf /etc/default/grub
+rm -rf /etc/grub.d/*
+
+yum reinstall grub2-tools
+
+-why doesnt this re-create /etc/default/grub?
+==================================================
+
