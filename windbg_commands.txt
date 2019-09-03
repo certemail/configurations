@@ -22,44 +22,47 @@ set _NT_SYMBOL_PATH
 sxe ld [DLL_NAME]                                                       // break on module load
 
 --- BREAKPOINTS ---
-bp $exentry                     // break on entry point
-bl                              // list breakpoints
-bc [NUM]                        // clear break point
-bm ws2_32!*                     // can use wild card to set multiple breakpoints
+bp $exentry                             // break on entry point
+bl                                      // list breakpoints
+bc [NUM]                                // clear break point
+bm ws2_32!*                             // can use wild card to set multiple breakpoints
 
-!address                        // memory map
-!address 0x77112233             // information on specific memory addr
-!dh 0xfd0000                    // PE header information
-lm                              // list loaded modules
-x kernel32!Virtual*             // browse symbols for module using wildcard
-k                               // view call stack
-!findstack kernel32             // find string "kernel32" in all threads' stacks
+!address                                // memory map
+!address 0x77112233                     // information on specific memory addr
+!dh 0xfd0000                            // PE header information
+lm                                      // list loaded modules
+x kernel32!Virtual*                     // browse symbols for module using wildcard
+k                                       // view call stack
+!findstack kernel32                     // find string "kernel32" in all threads' stacks
 
-dt -r ntdll!_IMAGE_NT_HEADERS   // show structure fields for symbol
+dt -r ntdll!_IMAGE_NT_HEADERS           // show structure fields for symbol
 
-eb $peb+0x2 0x0                 // edit byte at PEB offset of 2 bytes and set to 0 (thwart anti-debug)
+eb $peb+0x2 0x0                         // edit byte at PEB offset of 2 bytes and set to 0 (thwart anti-debug)
 
-.writemem C:\out.bin START END  // write out to disk memory from start to end address 
-                                   use !address to get end range of memory segment
+.writemem C:\out.bin START END          // write out to disk memory from start to end address 
+                                           use !address to get end range of memory segment
 
 --- SEARCH MEMORY ---
-s -a START END http             // search memory for ASCII string "http" in start end region
-s -a 0x12345 L100 http          // start search at address 0x12345 and end 100 bytes
-
-? 0n123                         // display "123" as hexadecimal
-
-dd poi(0x12345)                 // dereference what address 0x12345 points to
-dd poi(esp)                     // dereference what is on the top of the stack
+s -a START END http                     // search memory for ASCII string "http" in start end region
+s -a 0x12345 L100 http                  // start search at address 0x12345 and end 100 bytes
 
 
-.restart                        // restart exe (only if launched by WinDbg originally)
+dd poi(0x12345)                         // dereference what address 0x12345 points to
+dd poi(esp)                             // dereference what is on the top of the stack
 
-sxe -c "k;g;" e06d7363          // configure exceptions such that we break on error e06d7363                                      // execute the command k;g; (print traceback in that thread
-                                // and then continue
 
-.logopen [PATH_TO_LOG_FILE]     // record console output to a logfile
+.restart                                // restart exe (only if launched by WinDbg originally)
+
+sxe -c "k;g;" e06d7363                  // configure exceptions such that we break on error e06d7363
+                                        // execute the command k;g; (print traceback in that thread
+                                        // and then continue
+
+sxe -c "kv;!analyze -v;g;" e06d7363     // more detailed exception analysis
+
 .logclose
 
+? 0n123                                 // display "123" as hexadecimal
+
 .formats [NUM]
-.formats 0n15                   // display all formats (binary, ascii, etc.) for decimal 15
+.formats 0n15                           // display all formats (binary, ascii, etc.) for decimal 15
 .formats 0x3c                   
