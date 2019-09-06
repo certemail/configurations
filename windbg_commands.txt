@@ -27,6 +27,10 @@ bl                                      // list breakpoints
 bc [NUM]                                // clear break point
 bm ws2_32!*                             // can use wild card to set multiple breakpoints
 
+bp MyDll!MyFunc "da poi(esp+4); g       // dereference 2nd pointer on stack
+
+bp kernel32!GetProcAddress ".printf \"GETPROCADDRESS=%ma\\n\", poi(esp+8); g"
+
 !address                                // memory map
 !address 0x77112233                     // information on specific memory addr
 !dh 0xfd0000                            // PE header information
@@ -58,6 +62,7 @@ sxe -c "k;g;" e06d7363                  // configure exceptions such that we bre
                                         // and then continue
 
 sxe -c "kv;!analyze -v;g;" e06d7363     // more detailed exception analysis
+sxr                                     // reset all sx* exceptions to default
 
 .logclose
 
