@@ -49,6 +49,8 @@ eb $peb+0x2 0x0                         // edit byte at PEB offset of 2 bytes an
 --- SEARCH MEMORY ---
 s -a START END http                     // search memory for ASCII string "http" in start end region
 s -a 0x12345 L100 http                  // start search at address 0x12345 and end 100 bytes
+s -a 0x0 L!0x7FFFFFFF http              // search all of user space for ACSII string
+s -u 0x0 L!0x7FFFFFFF http              // search all of user space for ACSII string
 
 
 dd poi(0x12345)                         // dereference what address 0x12345 points to
@@ -71,3 +73,6 @@ sxr                                     // reset all sx* exceptions to default
 .formats [NUM]
 .formats 0n15                           // display all formats (binary, ascii, etc.) for decimal 15
 .formats 0x3c                   
+
+
+dd /c1 0x400123 L5                      // display in one column the first 5 DWORDS
