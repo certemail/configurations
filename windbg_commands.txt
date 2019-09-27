@@ -24,12 +24,15 @@ sxe ld [DLL_NAME]                                                       // break
 --- BREAKPOINTS ---
 bp $exentry                             // break on entry point
 bl                                      // list breakpoints
+.bpcmds                                 // list commands used to set current breakpoints 
 bc [NUM]                                // clear break point
 bm ws2_32!*                             // can use wild card to set multiple breakpoints
 
 bp MyDll!MyFunc "da poi(esp+4); g       // dereference 2nd pointer on stack
 
 bp kernel32!GetProcAddress ".printf \"GETPROCADDRESS=%ma\\n\", poi(esp+8); g"
+bp kernel32!WriteFile ".printf \"Dumping file contents from 0x%p as UNICDE: %mu\", poi(esp+0x8);.echo;g"
+tprintf /D "<b> this is bolded </b>"
 
 !address                                // memory map
 !address 0x77112233                     // information on specific memory addr
@@ -49,8 +52,11 @@ eb $peb+0x2 0x0                         // edit byte at PEB offset of 2 bytes an
 --- SEARCH MEMORY ---
 s -a START END http                     // search memory for ASCII string "http" in start end region
 s -a 0x12345 L100 http                  // start search at address 0x12345 and end 100 bytes
-s -a 0x0 L!0x7FFFFFFF http              // search all of user space for ACSII string
-s -u 0x0 L!0x7FFFFFFF http              // search all of user space for ACSII string
+s -a 0x0 L?0x7FFFFFFF http              // search all of user space for ACSII string
+s -u 0x0 L?0x7FFFFFFF http              // search all of user space for UNICODE string
+
+// dump all strings with max length of 100 containing "somestring"
+.foreach(OBJ {s -[1]a 0x0 L?0x7FFFFFFF "somestring"}){da /c 0n100 ${OBJ}}
 
 
 dd poi(0x12345)                         // dereference what address 0x12345 points to
@@ -64,7 +70,9 @@ sxe -c "k;g;" e06d7363                  // configure exceptions such that we bre
                                         // and then continue
 
 sxe -c "kv;!analyze -v;g;" e06d7363     // more detailed exception analysis
+sxi ld                                  // hide module loading messags
 sxr                                     // reset all sx* exceptions to default
+
 
 .logclose
 
@@ -76,3 +84,23 @@ sxr                                     // reset all sx* exceptions to default
 
 
 dd /c1 0x400123 L5                      // display in one column the first 5 DWORDS
+
+
+--- SCRIPT FILES ---
+// run script WITHOUT contents concatenated into a single command block
+windbg -W myworkspace -o -c "$<C:\Path\To\myscriptfile.txt TARGET.EXE
+
+// run script cmds literally, replace all carriage returns with semicolons,
+//  and execute the resulting text as a single command block
+windbg -W myworkspace -o -c "$$><C:\Path\To\myscriptfile.txt TARGET.EXE
+
+// enable breakpoints after a certain breakpoint has been reached
+bp 0x12345 "be 1;be 2;be 3;g"
+$$
+bp SomeFunc1 ".printf ...g;"
+bp SomeFunc2 ".printf ...g;"
+bp SomeFunc3 ".printf ...g;"
+$$
+$$ disable breakpoints initially until 0x12345 code is reached, then enable them
+bd 1;bd 2; bd 3; 
+g
