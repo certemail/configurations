@@ -18,9 +18,9 @@ set _NT_SYMBOL_PATH
 .reload /f                                                                  // reload symbols
 
 --- BREAKPOINTS --------------------------------------------------------
-bp $exentry                             // break on entry point
 bl                                      // list breakpoints
 .bpcmds                                 // list commands used to set current breakpoints 
+bp $exentry                             // break on entry point
 bc [NUM]                                // clear break point
 bd [NUM]                                // disable breakpoint
 bm ws2_32!*                             // can use wild card to set multiple breakpoints
@@ -29,6 +29,7 @@ bp MyDll!MyFunc "da poi(esp+4); g       // dereference 2nd pointer on stack
 
 bp kernel32!GetProcAddress ".printf \"GETPROCADDRESS=%ma\\n\", poi(esp+8); g"
 bp kernel32!WriteFile ".printf \"Dumping file contents from 0x%p as UNICDE: %mu\", poi(esp+0x8);.echo;g"
+
 printf /D "<b> this is bolded </b>"
 
 --- SEARCH MEMORY -----------------------------------------------------------
