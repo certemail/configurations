@@ -1,10 +1,10 @@
+--- STEPPING -----------------------------------------------------
 F8          step-into
 F10         step-over
 Shift-F11   step-out
 
 --- SYMBOLS ---
 set _NT_SYMBOL_PATH
-
 !sym noisy                                                                  // more info on retrieval
 
 - ways to set symbol path:
@@ -17,22 +17,58 @@ set _NT_SYMBOL_PATH
 
 .reload /f                                                                  // reload symbols
 
-
---- COMMANDS ---
-sxe ld [DLL_NAME]                                                       // break on module load
-
---- BREAKPOINTS ---
+--- BREAKPOINTS --------------------------------------------------------
 bp $exentry                             // break on entry point
 bl                                      // list breakpoints
 .bpcmds                                 // list commands used to set current breakpoints 
 bc [NUM]                                // clear break point
+bd [NUM]                                // disable breakpoint
 bm ws2_32!*                             // can use wild card to set multiple breakpoints
 
 bp MyDll!MyFunc "da poi(esp+4); g       // dereference 2nd pointer on stack
 
 bp kernel32!GetProcAddress ".printf \"GETPROCADDRESS=%ma\\n\", poi(esp+8); g"
 bp kernel32!WriteFile ".printf \"Dumping file contents from 0x%p as UNICDE: %mu\", poi(esp+0x8);.echo;g"
-tprintf /D "<b> this is bolded </b>"
+printf /D "<b> this is bolded </b>"
+
+--- SEARCH MEMORY -----------------------------------------------------------
+s -a START END http                     // search memory for ASCII string "http" in start end region
+s -a 0x12345 L100 http                  // start search at address 0x12345 and end 100 bytes
+s -a 0x0 L?0x7FFFFFFF http              // search all of user space for ACSII string
+s -u 0x0 L?0x7FFFFFFF http              // search all of user space for UNICODE string
+
+// dump all strings with max length of 100 containing "somestring"
+.foreach(OBJ {s -[1]a 0x0 L?0x7FFFFFFF "somestring"}){da /c 0n100 ${OBJ}}
+
+--- DISPLAY MEMORY --------------------------------------------------------
+dd poi(0x12345)                         // dereference what address 0x12345 points to
+dd poi(esp)                             // dereference what is on the top of the stack
+da /c100 0x12345                        // print ASCII string with 100 characters on a line (easy to copy/paste)
+dd /c1 0x400123 L5                      // display in one column the first 5 DWORDS
+
+--- EXCEPTIONS --------------------------------------------------------
+sxe ld [DLL_NAME]                       // break on module load (dont include ".dll")
+sxe -c "kv;!analyze -v;g;" e06d7363     // more detailed exception analysis
+sxi ld                                  // hide module loading messags
+sxr                                     // reset all sx* exceptions to default
+
+sxe -c "k;g;" e06d7363                  // configure exceptions such that we break on error e06d7363
+                                        // execute the command k;g; (print traceback in that thread
+                                        // and then continue
+
+--- LOG FILES --------------------------------------------------------
+.logopen [PATH_TO_LOG_FILE]             // open log 
+.logclose                               // close log
+
+--- FORMAT NUMBERS --------------------------------------------------------
+? 0n123                                 // display "123" as hexadecimal
+? 0x123                                 // display "0x123" as decimal
+.formats [NUM]
+.formats 0n15                           // display all formats (binary, ascii, etc.) for decimal 15
+.formats 0x3c                   
+
+--- OTHER COMMANDS --------------------------------------------------------
+.restart                                // restart exe (only if launched by WinDbg originally)
 
 !address                                // memory map
 !address 0x77112233                     // information on specific memory addr
@@ -49,44 +85,7 @@ eb $peb+0x2 0x0                         // edit byte at PEB offset of 2 bytes an
 .writemem C:\out.bin START END          // write out to disk memory from start to end address 
                                            use !address to get end range of memory segment
 
---- SEARCH MEMORY ---
-s -a START END http                     // search memory for ASCII string "http" in start end region
-s -a 0x12345 L100 http                  // start search at address 0x12345 and end 100 bytes
-s -a 0x0 L?0x7FFFFFFF http              // search all of user space for ACSII string
-s -u 0x0 L?0x7FFFFFFF http              // search all of user space for UNICODE string
-
-// dump all strings with max length of 100 containing "somestring"
-.foreach(OBJ {s -[1]a 0x0 L?0x7FFFFFFF "somestring"}){da /c 0n100 ${OBJ}}
-
-
-dd poi(0x12345)                         // dereference what address 0x12345 points to
-dd poi(esp)                             // dereference what is on the top of the stack
-
-
-.restart                                // restart exe (only if launched by WinDbg originally)
-
-sxe -c "k;g;" e06d7363                  // configure exceptions such that we break on error e06d7363
-                                        // execute the command k;g; (print traceback in that thread
-                                        // and then continue
-
-sxe -c "kv;!analyze -v;g;" e06d7363     // more detailed exception analysis
-sxi ld                                  // hide module loading messags
-sxr                                     // reset all sx* exceptions to default
-
-
-.logclose
-
-? 0n123                                 // display "123" as hexadecimal
-
-.formats [NUM]
-.formats 0n15                           // display all formats (binary, ascii, etc.) for decimal 15
-.formats 0x3c                   
-
-
-dd /c1 0x400123 L5                      // display in one column the first 5 DWORDS
-
-
---- SCRIPT FILES ---
+--- SCRIPT FILES -----------------------------------------------------------
 // run script WITHOUT contents concatenated into a single command block
 windbg -W myworkspace -o -c "$<C:\Path\To\myscriptfile.txt TARGET.EXE
 
