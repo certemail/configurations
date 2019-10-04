@@ -47,6 +47,7 @@ da /c100 0x12345                        // print ASCII string with 100 character
 dd /c1 0x400123 L5                      // display in one column the first 5 DWORDS
 
 --- EXCEPTIONS --------------------------------------------------------
+sx                                      // list currently set exceptions
 sxe ld [DLL_NAME]                       // break on module load (dont include ".dll")
 sxe -c "kv;!analyze -v;g;" e06d7363     // more detailed exception analysis
 sxi ld                                  // hide module loading messags
