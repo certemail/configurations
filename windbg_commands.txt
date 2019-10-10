@@ -87,6 +87,9 @@ eb $peb+0x2 0x0                         // edit byte at PEB offset of 2 bytes an
 .writemem C:\out.bin START END          // write out to disk memory from start to end address 
                                            use !address to get end range of memory segment
 
+.childdbg 1                             // debug any child processes created
+|0s |1s |2s                             // switch between parent & child processes
+
 --- SCRIPT FILES -----------------------------------------------------------
 // run script WITHOUT contents concatenated into a single command block
 windbg -W myworkspace -o -c "$<C:\Path\To\myscriptfile.txt TARGET.EXE
@@ -105,3 +108,15 @@ $$
 $$ disable breakpoints initially until 0x12345 code is reached, then enable them
 bd 1;bd 2; bd 3; 
 g
+
+--- REMOTE DEBUGGING  -----------------------------------------------------------
+Remote Stub:
+    -TARGET PC (start dbg server and verify listening on correct port):
+        * C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\dbgsrv.exe -t tcp:port=[PORT_NUM]
+        * netstat -a | findstr [PORT_NUM]  
+
+    -DEBUGGER PC (start windbg GUI and connect to remote process)
+        * File -> Connect to Remote Stub... -> Connection String: tcp:port=[PORT_NUM]
+        * Attach to a Process...
+
+
