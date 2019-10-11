@@ -116,7 +116,21 @@ Remote Stub:
         * netstat -a | findstr [PORT_NUM]  
 
     -DEBUGGER PC (start windbg GUI and connect to remote process)
-        * File -> Connect to Remote Stub... -> Connection String: tcp:port=[PORT_NUM]
+        * File -> Connect to Remote Stub... -> Connection String: tcp:port=[PORT_NUM],server=[PC-TARGET]
         * Attach to a Process...
 
 
+    -Use cmd.exe to kill dbgsrv.exe running:
+        * TASKKILL /IM dbgsrv.exe /F
+        * netstat -ano | findstr [PORT_NUM]     (check if still listening)
+        * TASKILL /PID 1234 /F
+
+
+    -Kill remote process from inside windbg:
+        .shell -x TASKKILL /S PC-TARGET /U user /FI "IMAGENAME eq notepad.exe"
+
+        NOTE!!! must disable Remote UAC on the target computer !!! use regedit:
+        * HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+        * Edit -> "New DWORD Value"
+        * Create if entry "LocalAccountTokenFilterPolicy" does not exist
+        * Modify "Value data", and set to "1"
