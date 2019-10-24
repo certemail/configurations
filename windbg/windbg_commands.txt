@@ -109,6 +109,22 @@ $$ disable breakpoints initially until 0x12345 code is reached, then enable them
 bd 1;bd 2; bd 3; 
 g
 
+
+--- GFLAGS  -----------------------------------------------------------
+-To attach to a process immediately after it is launched (and also load workspace & windbg script file):
+    * Run "Gflags" from 'Run' or from cmd prompt (Run-as Administrator) -> Image File tab
+    * Image:     "MYFILE.EXE"
+    * Debugger:  "C:\Program Files\Debugging Tools for Windows (x64)\windbg.exe" -W [MYWORKSPACE] 
+                          -o -c $<C:\Users\Administrator\[MYWINDBGSCRIPT.TXT]
+
+-To clear and allow the process to be launched normally:
+    * Image:     "MYFILE.EXE"
+    * Uncheck "Debugger"
+
+-To add/remove flags from command line (ex. below "show loader snaps" - sls)
+    $> gflags /i MYAPP.EXE -i [+|-]sls
+    
+
 --- REMOTE DEBUGGING  -----------------------------------------------------------
 Remote Stub:
     -TARGET PC (start dbg server and verify listening on correct port):
