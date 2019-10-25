@@ -1,11 +1,10 @@
---- STEPPING -----------------------------------------------------
+--- STEPPING ---------------------------------------------------------
 F8          step-into
 F10         step-over
 Shift-F11   step-out
 
---- SYMBOLS ---
+--- SYMBOLS -----------------------------------------------------------
 set _NT_SYMBOL_PATH
-!sym noisy                                                                  // more info on retrieval
 
 - ways to set symbol path:
     _NT_SYMBOL_PATH                                                         // environment variable
@@ -15,7 +14,14 @@ set _NT_SYMBOL_PATH
     symchk.exe "C:\Windows\system32\kernel32.dll" 
         /s SRV*C:\symbols\*http://msdl.microsoft.com/download/symbols
 
-.reload /f                                                                  // reload symbols
+!sym noisy                              // more info on retrieval
+.reload /f                              // reload symbols
+.symopt                                 // display current symbol options enabled
+.symopt+0x100                           // SYMOPT_NO_UNQUALIFIED_LOADS (search only loaded modules - speed up)
+.symopt-0x100                           // turn off SYMOPT_NO_UNQUALIFIED_LOADS
+
+!chksym [SOMEDLL.dll]                   // check if symbols properly match for a dll
+
 
 --- BREAKPOINTS --------------------------------------------------------
 bl                                      // list breakpoints
@@ -23,7 +29,7 @@ bl                                      // list breakpoints
 bp $exentry                             // break on entry point
 bc [NUM]                                // clear break point
 bd [NUM]                                // disable breakpoint
-bm ws2_32!*                             // can use wild card to set multiple breakpoints
+bm ws2_32!*                             // wild card to set multiple breakpoints (see "/a" option)
 
 bp MyDll!MyFunc "da poi(esp+4); g       // dereference 2nd pointer on stack
 
