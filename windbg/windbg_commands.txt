@@ -39,8 +39,11 @@ bp kernel32!WriteFile ".printf \"Dumping file contents from 0x%p as UNICDE: %mu\
 printf /D "<b> this is bolded </b>"
 
 --- SEARCH MEMORY -----------------------------------------------------------
-s -a START END http                     // search memory for ASCII string "http" in start end region
-s -a 0x12345 L100 http                  // start search at address 0x12345 and end 100 bytes
+s -sa       START END                   // search for all ASCII strings (no specific pattern)
+s -su       START END                   // search for all UNICODE strings
+s -[l5]sa   START END                   // search for ASCII strings atleast 5 bytes in length
+s -a        START END http              // search memory for ASCII string "http" in start end region
+s -a        START L100 http             // start search at address 0x12345 and end 100 bytes
 s -a 0x0 L?0x7FFFFFFF http              // search all of user space for ACSII string
 s -u 0x0 L?0x7FFFFFFF http              // search all of user space for UNICODE string
 
