@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# from tecmint.com
 # put this into .bashrc or /etc/profile.d/
 
 export LESS_TERMCAP_mb=$'\e[1;32m'
