@@ -7,3 +7,8 @@ yum reinstall grub2-tools
 -why doesnt this re-create /etc/default/grub?
 ==================================================
 how to troubleshoot kickstart errors (e.g., disk partitioning) "no disks selected" displayed in GUI - where in anaconda log files to check?
+==================================================
+systemd-tmpfiles: what is the difference between "d" and "D"?
+    -how to observe difference using a simple test case?
+==================================================
+
