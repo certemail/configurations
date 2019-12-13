@@ -3,6 +3,11 @@ F8          step-into
 F10         step-over
 Shift-F11   step-out
 
+pc          step until next CALL instruction
+pa [ADDR]   step until ADDRESS is reached
+wt          trace and watch execution of functions and sub-functions (run at the beginning of function)
+wt -oR      trace and watch execution of functions and sub-functions (and display return values)
+
 --- SYMBOLS -----------------------------------------------------------
 set _NT_SYMBOL_PATH
 
@@ -44,6 +49,7 @@ s -su       START END                   // search for all UNICODE strings
 s -[l5]sa   START END                   // search for ASCII strings atleast 5 bytes in length
 s -a        START END http              // search memory for ASCII string "http" in start end region
 s -a        START L100 http             // start search at address 0x12345 and end 100 bytes
+s -b        START END 01 02 03 0A 0B    // search for byte pattern 0x0102030A0B
 s -a 0x0 L?0x7FFFFFFF http              // search all of user space for ACSII string
 s -u 0x0 L?0x7FFFFFFF http              // search all of user space for UNICODE string
 
@@ -55,6 +61,8 @@ dd poi(0x12345)                         // dereference what address 0x12345 poin
 dd poi(esp)                             // dereference what is on the top of the stack
 da /c100 0x12345                        // print ASCII string with 100 characters on a line (easy to copy/paste)
 dd /c1 0x400123 L5                      // display in one column the first 5 DWORDS
+
+!mapped_file [ADDR]                     // show name of file that contains ADDR
 
 --- EXCEPTIONS --------------------------------------------------------
 sx                                      // list currently set exceptions
