@@ -1,12 +1,15 @@
 --- STEPPING ---------------------------------------------------------
-F8          step-into
-F10         step-over
-Shift-F11   step-out
+F8              step-into
+F10             step-over
+Shift-F11       step-out
 
-pc          step until next CALL instruction
-pa [ADDR]   step until ADDRESS is reached
-wt          trace and watch execution of functions and sub-functions (run at the beginning of function)
-wt -oR      trace and watch execution of functions and sub-functions (and display return values)
+pc              step until next CALL instruction
+pa [ADDR]       step until ADDRESS is reached
+wt              trace and watch execution of functions and sub-functions (run at the beginning of function)
+wt -oR          trace and watch execution of functions and sub-functions (and display return values)
+wt -oa          trace and watch execution of functions (and report actual addresses of call)
+wt -ni -m MYDLL trace and only include code from MYDLL (and ignore everything else)
+wt =START END   trace from START address and stop and END address
 
 --- SYMBOLS -----------------------------------------------------------
 set _NT_SYMBOL_PATH
