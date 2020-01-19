@@ -1,0 +1,5 @@
+
+LVM
+-reduce volume group:
+    # pvmove /dev/sdX
+    # vgreduce my-volgroup /dev/sdX

@@ -11,4 +11,9 @@ how to troubleshoot kickstart errors (e.g., disk partitioning) "no disks selecte
 systemd-tmpfiles: what is the difference between "d" and "D"?
     -how to observe difference using a simple test case?
 ==================================================
+should we purposely mask iptables6.service (to not conflict w/ firewalld)?
+=================================================
+should we purposely mask ntpd (to not conflict w/ chrony)?
+
+
 
