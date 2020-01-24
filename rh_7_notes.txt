@@ -1,5 +1,25 @@
 
+CRON:
+export EDITOR=$(which vim)
+export VISUAL=$(which vim)
+
 LVM
 -reduce volume group:
     # pvmove /dev/sdX
     # vgreduce my-volgroup /dev/sdX
+
+
+ROOT PASSWD RESET
+rd.break
+# mount -o remount,rw /sysroot
+# chroot /sysroot
+# passwd
+# touch .autorelabel
+# exit
+# exit
+
+MAKE JOURNAL PERSISTENT
+# mkdir /var/log/journal
+# chmod 2775 /var/log/journal
+# chown :systemd-journal /var/log/journal
+# killall -s USR1 systemd-journald
