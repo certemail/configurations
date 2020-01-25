@@ -23,3 +23,42 @@ MAKE JOURNAL PERSISTENT
 # chmod 2775 /var/log/journal
 # chown :systemd-journal /var/log/journal
 # killall -s USR1 systemd-journald
+
+==================================
+NFS
+-installation
+    # yum install nfs-utils
+    # systemctl start  nfs-secure
+    # systemctl enable nfs-secure
+
+nfs(5) for options:
+    security: none, sys, krb5, krb5i, krb5p
+
+mount(8) for options:
+    ro,rw,sync...
+
+-for Kerberos, need the the keytab stored in:
+    /etc/krb5.keytab
+
+-use _netdev as option for network shares
+
+==================================
+AUTOFS
+auto.master(5) 
+    /home/ldap  /etc/auto.home    (contents of /etc/auto.master.d/home.autofs)
+    kernel -fstype=cifs
+
+autofs(5): 
+    guests  -fstype=cifs,credentials=/secure/bob.cred   ://server1/guests
+    *       -rw,sync server:/home/ldap/&   
+
+# rpm -qc autofs
+    /etc/sysconfig/autofs   (for logging setup)
+
+==================================
+TMPFILES:
+man(5) tmpfiles.d
+man(8) systemd-tmpfiles  [usage for --clean --remove --create] 
+
+==========================================================
+
