@@ -26,6 +26,6 @@ firewall-cmd: to change the default zone, get error:
     question: To change the default zone, do we also need to
               use --change-interface option as well?
 =================================================
-
+tmpfiles.d -> what is difference between "d" and "D"?
 
 
