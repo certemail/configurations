@@ -16,6 +16,16 @@ should we purposely mask iptables6.service (to not conflict w/ firewalld)?
 should we purposely mask ntpd (to not conflict w/ chrony)?
 =================================================
 how to enable firewall-cmd logging?
+=================================================
+firewall-cmd: to change the default zone, get error:
+    "You're performing an operation over default zone ('public'),
+    but your connections/interfaces are in zone 'dmz/internal'
+    (see --get-active-zones)
+    You most likely need to use --zone=dmz option
+
+    question: To change the default zone, do we also need to
+              use --change-interface option as well?
+=================================================
 
 
 
