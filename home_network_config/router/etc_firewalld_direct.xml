@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<direct>
+  <passthrough ipv="ipv4">-t nat -I POSTROUTING -o p1p1 -j MASQUERADE -s 10.0.0.0/24</passthrough>
+</direct>

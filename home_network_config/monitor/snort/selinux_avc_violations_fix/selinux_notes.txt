@@ -1,0 +1,20 @@
+# AVC violation for /usr/sbin/snort-plain mmap access on packet_socket
+# this prevents DAQ from starting up
+
+grep sealert /var/log/messages
+audit2allow -a -m mysnort
+
+checkmodule -M -m -o mysnort.mod mysnort.te
+semodule_package -o mysnort.pp -m mysnort.mod
+semodule -i mysnort.pp
+
+# sesearch -s snort_t -t snort_t -c packet_socket -Ad
+    Found 1 semantic av rules:
+        allow snort_t snort_t : packet_socket { ioctl read write create getattr setattr lock append map bind connect getopt setopt shutdown } ;
+
+
+#-----------
+if log directory is changed from /var/log/snort, may need to change type (snort_log_t)
+semanage fcontext --list -C  (show local changes only):
+
+    /home/snort_logs(/.*)?    all files   system_u:object_r:snort_log_t:s0

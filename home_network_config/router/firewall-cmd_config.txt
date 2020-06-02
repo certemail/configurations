@@ -1,0 +1,39 @@
+external (active)
+  target: default
+  icmp-block-inversion: no
+  interfaces: p1p1
+  sources: 
+  services: ssh
+  ports: 
+  protocols: 
+  masquerade: yes
+  forward-ports: 
+  source-ports: 
+  icmp-blocks: 
+  rich rules: 
+	
+internal (active)
+  target: default
+  icmp-block-inversion: no
+  interfaces: p1p2
+  sources: 
+  services: dhcpv6-client mdns samba-client ssh
+  ports: 
+  protocols: 
+  masquerade: no
+  forward-ports: 
+  source-ports: 
+  icmp-blocks: 
+  rich rules: 
+	
+
+# https://ronnybull.com/2015/11/20/how-to-centos-7-router/
+# on the gateway (p1p1 is the external facing interface) and 10.0.0.0/24 is the internal subnet
+
+firewall-cmd --permanent --direct --passthrough ipv4 -t nat -I POSTROUTING -o p1p1 -j MASQUERADE -s 10.0.0.0/24
+firewall-cmd --change-interface=p1p1 --zone=external --permanent
+firewall-cmd --set-default-zone=internal
+firewall-cmd --complete-reload
+firewall-cmd --list-all
+firewall-cmd --list-all --zone=external
+

@@ -1,0 +1,8 @@
+module mysnort 1.0;
+
+require {
+	type snort_t;
+	class packet_socket map;
+}
+
+allow snort_t self:packet_socket map;
