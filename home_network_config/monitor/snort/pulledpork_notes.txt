@@ -1,5 +1,6 @@
-to run pulledpork for first time or update (and pull down security-based rules, other options are balanced or connectivity):
-    # /usr/local/bin/pulledpork.pl -vv -c /etc/snort/pulledpork/etc/pulledpork.conf -l -I security
+to run pulledpork for first time or update 
+be sure to specify ips_policy in pulledpork.conf as security, balanced, or connectivity:
+    # /usr/local/bin/pulledpork.pl -vv -c /etc/snort/pulledpork/etc/pulledpork.conf -l
 
 to enable all rules that have been already downloaded, add the following to enablesid.conf and process rules
     # echo 'pcre:.' >> /etc/snort/pulledpork/etc/enablesid.conf 
@@ -7,6 +8,6 @@ to enable all rules that have been already downloaded, add the following to enab
 
 to create a daily cronjob for updating rules:
     echo '#!/bin/bash' > /etc/cron.daily/snort_pulledpork_rules_update
-    echo '/usr/local/bin/pulledpork.pl -vv -c /etc/snort/pulledpork/etc/pulledpork.conf -l -I security' >> /etc/cron.daily/snort_pulledpork_rules_update
+    echo '/usr/local/bin/pulledpork.pl -vv -c /etc/snort/pulledpork/etc/pulledpork.conf -l' >> /etc/cron.daily/snort_pulledpork_rules_update
     chmod 700 /etc/cron.daily/snort_pulledpork_rules_update
 
