@@ -112,11 +112,11 @@ eb $peb+0x2 0x0                         // edit byte at PEB offset of 2 bytes an
 
 --- SCRIPT FILES -----------------------------------------------------------
 // run script WITHOUT contents concatenated into a single command block
-windbg -W myworkspace -o -c "$<C:\Path\To\myscriptfile.txt TARGET.EXE
+windbg -W myworkspace -o -c "$<C:\Path\To\myscriptfile.txt" TARGET.EXE
 
 // run script cmds literally, replace all carriage returns with semicolons,
 //  and execute the resulting text as a single command block
-windbg -W myworkspace -o -c "$$><C:\Path\To\myscriptfile.txt TARGET.EXE
+windbg -W myworkspace -o -c "$$><C:\Path\To\myscriptfile.txt" TARGET.EXE
 
 // enable breakpoints after a certain breakpoint has been reached
 bp 0x12345 "be 1;be 2;be 3;g"
