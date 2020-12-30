@@ -32,8 +32,8 @@ set _NT_SYMBOL_PATH
 
 
 --- BREAKPOINTS --------------------------------------------------------
-bl                                      // list breakpoints
 .bpcmds                                 // list commands used to set current breakpoints 
+bl                                      // list breakpoints
 bp $exentry                             // break on entry point
 bc [NUM]                                // clear break point
 bd [NUM]                                // disable breakpoint
@@ -42,9 +42,21 @@ bm ws2_32!*                             // wild card to set multiple breakpoints
 bp MyDll!MyFunc "da poi(esp+4); g       // dereference 2nd pointer on stack
 
 bp kernel32!GetProcAddress ".printf \"GETPROCADDRESS=%ma\\n\", poi(esp+8); g"
-bp kernel32!WriteFile ".printf \"Dumping file contents from 0x%p as UNICDE: %mu\", poi(esp+0x8);.echo;g"
+bp kernel32!WriteFile ".printf \"Dumping file contents from 0x%p as UNICODE: %mu\", poi(esp+0x8);.echo;g"
 
-printf /D "<b> this is bolded </b>"
+printf /D "<b> this is bolded </b>"     // Debugger Markup Language (DML)
+
+
+Conditional breakpoint / Unicode str:
+- for ASCII str, use "/ma" for the alias "as" command
+- breakpoint commands are placed in separate file from main .wds script
+
+    bp kernel32!CreateEventW "$$<c:\\commands.txt"
+    
+    c:\commands.txt:
+        .if (poi(esp+4) != 0) { as /mu ${/v:EventName} poi(esp+4) } .else { ad /q ${/v:EventName} }
+        .if ($spat(@"${EventName}", "*PATTERN*") == 0)  { gc } .else { .echo EventName }
+
 
 --- SEARCH MEMORY -----------------------------------------------------------
 s -sa       START END                   // search for all ASCII strings (no specific pattern)
