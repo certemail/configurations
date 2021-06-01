@@ -1,0 +1,47 @@
+---create shared object
+$ gcc <LIBRARY_SRC_FILE>.c -shared -fPIC -o <LIB_MYSHARED>.so
+
+---link against that shared object:
+$ gcc ${SRC} -L/PATH/TO/DIR/WITH/SHARED_LIB/ -lMYSHARED
+
+---embed path to library in executable:
+$ gcc ${SRC} -Wl,-path=/PATH/TO/DIR/WITH/SHARED_LIB/ -L/PATH/TO/DIR/WITH/SHARED_LIB/ -lMY_SHARED
+
+---debugging:
+$ LD_DEBUG=libs       ./a.out
+$ LD_DEBUG=bindings   ./a.out
+
+---get the following error?
+    ./a.out: error while loading shared libraries: libMY_SHARED.so: cannot open shared object file: No such file or directory
+
+    Update ld cache (and confirm it was added with the "-p" option:
+    # echo "/PATH/TO/DIR/WITH/SHARED_LIB/" > /etc/ld.so.conf.d/MY_SHARED.conf
+    # ldconfig -v
+    $ ldconfig -p
+    
+---display symbol information:
+$ readelf --syms <ELF_FILE>
+    
+---display .rodata section:
+$ readelf -p .rodata <ELF_FILE>
+
+---display .interp section:
+$ readelf -p .interp <ELF_FILE>
+
+---display relocations:
+$ readelf --relocs <OBJ_FILE>
+
+---display all headers (with "wide" option to fit all on one line):
+$ readelf -W -a <ELF_FILE>
+
+---display names of all sections:
+$ readelf -W --sections <ELF_FILE>
+
+---display .DYNAMIC section:
+$ readelf -W --dynamic <ELF_FILE>
+
+---display section-to-segment mapping:
+$ readelf -W --segments <ELF_FILE>
+
+---disassemble a section: 
+$ objdump -d -M intel -sj .<SECTION> <ELF_FILE>
