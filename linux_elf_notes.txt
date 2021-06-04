@@ -45,3 +45,24 @@ $ readelf -W --segments <ELF_FILE>
 
 ---disassemble a section: 
 $ objdump -d -M intel -sj .<SECTION> <ELF_FILE>
+
+
+==========================================================
+
+---extract embedded ELF file (just the header) out from file
+------can then use readelf to parse the headers to get exact size of full file:
+------SIZE = E_SHOFF + (E_SHNUM X E_SHENTSIZE)
+# dd skip=XX count=YY if=FILE_IN of=FILE_OUT bs=1
+
+==========================================================
+---run ltrace and output the instruction pointer at place of library call
+# ltrace -i <ELF_FILE>
+
+---run ltrace and demangle function names
+# ltrace -C <ELF_FILE>
+
+---parse dynamic symbols and demangle: 
+# nm -D --demanlge <ELF_FILE>
+
+---demangle function name (individually):
+# c++filt <MANGLED_FUNCTION_NAME>
