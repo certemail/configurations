@@ -1,0 +1,16 @@
+---dynamic disassembly / instruction trace:
+$ gdb <ELF_FILE>
+(gdb) info files                # get entry point of binary
+(gdb) b *0x<ENTRY_POINT>
+(gdb) set pagination off        # do not pause during output
+(gdb) set logging on            # default output is gdb.txt
+(gdb) set logging redirect on
+(gdb) run
+(gdb) display/i $pc             
+(gdb) while 1
+> si
+> end
+
+---dynamic disassembly - filter output from gdb:
+$ grep -E '=> 0x[0-9a-f]+:' gdb.txt 
+
