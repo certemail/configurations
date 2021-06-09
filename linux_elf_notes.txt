@@ -66,3 +66,7 @@ $ objdump -d -M intel -sj .<SECTION> <ELF_FILE>
 
 ---demangle function name (individually):
 # c++filt <MANGLED_FUNCTION_NAME>
+
+
+---perl: generate long string:
+$ perl -e 'print "A"x100'
