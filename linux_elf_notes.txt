@@ -34,6 +34,9 @@ $ readelf --relocs <OBJ_FILE>
 ---display all headers (with "wide" option to fit all on one line):
 $ readelf -W -a <ELF_FILE>
 
+---display file header:
+$ readelf -h <ELF_FILE>
+
 ---display names of all sections:
 $ readelf -W --sections <ELF_FILE>
 
@@ -43,8 +46,19 @@ $ readelf -W --dynamic <ELF_FILE>
 ---display section-to-segment mapping:
 $ readelf -W --segments <ELF_FILE>
 
+==========================================================
+
 ---disassemble a section: 
 $ objdump -d -M intel -sj .<SECTION> <ELF_FILE>
+
+---display full contents of section:
+$ objdump -s --section=.<SECTION> <ELF_FILE>
+
+---disassemble shellcode (32-bit):
+$ objdump -D -b binary -m i386 -M intel <SHELLCODE.BIN>
+
+---disassemble shellcode (64-bit):
+$ objdump -D -b binary -m i386 -M x86-64 <SHELLCODE.BIN>
 
 
 ==========================================================
