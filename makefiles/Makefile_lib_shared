@@ -1,0 +1,25 @@
+CC 		        = cc
+CFLAGS		        = -g -fPIC
+OUTPUT_OPTION	        = -MMD -MP -o $@
+SHARED_LIB_EXT		= so
+SHARED_LIB_FLAG		= -shared 
+
+SOURCE 	= $(wildcard *.c)
+OBJS	= $(SOURCE:.c=.o)
+DEPS	= $(SOURCE:.c=.d)
+-include ${DEPS}
+
+LIB_NAME = mysharedlib
+
+lib: ${OBJS}
+	${CC} ${OBJS} ${SHARED_LIB_FLAG} -o ${LIB_NAME}.${SHARED_LIB_EXT} 
+
+ctags:
+	ctags *.c *.h
+
+help:
+	-@echo "make lib: make the shared library ${LIB_NAME}"
+	-@echo "make ctags: build the ctags file"
+
+clean:
+	rm -f *.o ${LIB_NAME}

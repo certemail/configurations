@@ -1,0 +1,30 @@
+CC 		         = cc
+CFLAGS		         = -g
+OUTPUT_OPTION	         = -MMD -MP -o $@
+
+SOURCE 	= $(wildcard *.c)
+OBJS	= $(SOURCE:.c=.o)
+DEPS	= $(SOURCE:.c=.d)
+-include ${DEPS}
+
+LIB_NAME = mylib
+
+# this is a shorthand for: 
+# 
+#${LIB_NAME}: ${OBJS}
+#	ar cr ${LIB_NAME} ${OBJS} 
+#
+#
+# will make the static library without having 
+#   to specify both the "ar" command and OBJS
+lib: $(LIB_NAME)(${OBJS})
+
+ctags:
+	ctags *.c *.h
+
+help:
+	-@echo "make lib: make the static library ${LIB_NAME}"
+	-@echo "make ctags: build the ctags file"
+
+clean:
+	rm -f *.o ${LIB_NAME}
