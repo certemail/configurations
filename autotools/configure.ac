@@ -10,7 +10,8 @@ AC_CONFIG_HEADERS([config.h])
 # autools auxiliary files in a subdir and not in top dir
 AC_CONFIG_AUX_DIR([build-aux])
 
-AC_CONFIG_MACRO_DIR([m4])
+# not currently working, even with updating Makefile.am
+#AC_CONFIG_MACRO_DIR([m4])
 
 # enable automake to simplify creating makefiles
 # the "subdir-objects" is needed to put src files in subdir
