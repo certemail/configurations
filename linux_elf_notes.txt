@@ -11,6 +11,9 @@ $ gcc ${SRC} -Wl,-path=/PATH/TO/DIR/WITH/SHARED_LIB/ -L/PATH/TO/DIR/WITH/SHARED_
 $ LD_DEBUG=libs       ./a.out
 $ LD_DEBUG=bindings   ./a.out
 
+---debugging; show linker script and library search path sucess/failure
+$ gcc -o /dev/null -x c /dev/null -Wl,--verbose
+
 ---get the following error?
     ./a.out: error while loading shared libraries: libMY_SHARED.so: cannot open shared object file: No such file or directory
 
@@ -60,6 +63,8 @@ $ objdump -D -b binary -m i386 -M intel <SHELLCODE.BIN>
 ---disassemble shellcode (64-bit):
 $ objdump -D -b binary -m i386 -M x86-64 <SHELLCODE.BIN>
 
+---disassemble at start of address:
+$ objdump -D -M intel --start-address=0x<ADDRESS> <ELF_FILE>
 
 ==========================================================
 
