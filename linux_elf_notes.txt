@@ -61,7 +61,7 @@ $ objdump -s --section=.<SECTION> <ELF_FILE>
 $ objdump -D -b binary -m i386 -M intel <SHELLCODE.BIN>
 
 ---disassemble shellcode (64-bit):
-$ objdump -D -b binary -m i386 -M x86-64 <SHELLCODE.BIN>
+$ objdump -D -b binary -m i386 -M intel -M x86-64 <SHELLCODE.BIN>
 
 ---disassemble at start of address:
 $ objdump -D -M intel --start-address=0x<ADDRESS> <ELF_FILE>
