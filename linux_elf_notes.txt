@@ -13,6 +13,7 @@ $ LD_DEBUG=bindings   ./a.out
 
 ---debugging; show linker script and library search path sucess/failure
 $ gcc -o /dev/null -x c /dev/null -Wl,--verbose
+$ ld --verbose
 
 ---get the following error?
     ./a.out: error while loading shared libraries: libMY_SHARED.so: cannot open shared object file: No such file or directory
@@ -68,17 +69,44 @@ $ objdump -D -M intel --start-address=0x<ADDRESS> <ELF_FILE>
 
 ==========================================================
 
+---extract section from ELF file:
+$ objcopy --only-section=.<SECTION> <ELF_FILE> <OUTFILE>
+
+==========================================================
+
 ---extract embedded ELF file (just the header) out from file
 ------can then use readelf to parse the headers to get exact size of full file:
 ------SIZE = E_SHOFF + (E_SHNUM X E_SHENTSIZE)
 # dd skip=XX count=YY if=FILE_IN of=FILE_OUT bs=1
 
 ==========================================================
+
+---see all data being read into file descriptor 3
+$ strace -e read=3 <ELF_FILE>
+
+---see all data being written to file descriptor "FD"
+$ strace -e write=<FD> <ELF_FILE>
+==========================================================
+
+---show layout of process image with memory map; shows libraries loaded
+$ cat /proc/<PID>/maps
+
+---show layout of kernel memory
+$ cat /proc/iomem
+
+---show auxiliary vector info placed on program stack (entry point, address of VDSO, etc.):
+$ LD_SHOW_AUX=1 <ELF_FILE>
+
+==========================================================
+
 ---run ltrace and output the instruction pointer at place of library call
-# ltrace -i <ELF_FILE>
+# ltrace -i <ELF_FILE> -o <OUTFILE>
 
 ---run ltrace and demangle function names
 # ltrace -C <ELF_FILE>
+
+---run ltrace and show system calls in addition shared library calls
+# ltrace -S <ELF_FILE>
 
 ---parse dynamic symbols and demangle: 
 # nm -D --demanlge <ELF_FILE>
