@@ -95,7 +95,7 @@ $ cat /proc/<PID>/maps
 $ cat /proc/iomem
 
 ---show auxiliary vector info placed on program stack (entry point, address of VDSO, etc.):
-$ LD_SHOW_AUX=1 <ELF_FILE>
+$ LD_SHOW_AUXV=1 <ELF_FILE>
 
 ==========================================================
 
