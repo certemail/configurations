@@ -5,7 +5,7 @@ $ gcc <LIBRARY_SRC_FILE>.c -shared -fPIC -o <LIB_MYSHARED>.so
 $ gcc ${SRC} -L/PATH/TO/DIR/WITH/SHARED_LIB/ -lMYSHARED
 
 ---embed path to library in executable:
-$ gcc ${SRC} -Wl,-path=/PATH/TO/DIR/WITH/SHARED_LIB/ -L/PATH/TO/DIR/WITH/SHARED_LIB/ -lMY_SHARED
+$ gcc ${SRC} -Wl,-rpath=/PATH/TO/DIR/WITH/SHARED_LIB/ -L/PATH/TO/DIR/WITH/SHARED_LIB/ -lMY_SHARED
 
 ---debugging:
 $ LD_DEBUG=libs       ./a.out
