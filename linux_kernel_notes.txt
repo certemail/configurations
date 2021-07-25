@@ -1,0 +1,25 @@
+ERROR CODES:
+https://elixir.bootlin.com/linux/v3.16/source/include/uapi/asm-generic/errno-base.h
+
+API:
+https://01.org/linuxgraphics/gfx-docs/drm/#
+https://elixir.bootlin.com/linux/v3.16/source/Documentation
+https://elixir.bootlin.com/linux/v3.16/source/arch/x86/include/asm/uaccess.h
+https://chromium.googlesource.com/chromiumos/docs/+/HEAD/constants/syscalls.md#x86-32_bit
+
+Kernel implementation of memset():
+https://elixir.bootlin.com/linux/v3.16/source/include/linux/string.h#L99
+
+Show all j/kprobes from userspace:
+# cat /sys/kernel/debug/kprobes/list
+
+FIND SIGNATURE OF SYSTEMCALL:
+grep -rne 'SYSCALL_DEFINE.(mkdir*' /usr/src/linux-source-*
+
+FIND __NR_ FOR SYSTEMCALL:
+usr/src/linux-source-*/include/uapi/asm-generic/unistd.h
+https://chromium.googlesource.com/chromiumos/docs/+/master/constants/syscalls.md
+
+for a multi-source file module:
+    obj-m += mymodule.o,
+    mymodule-objs += part1.o part2.o
