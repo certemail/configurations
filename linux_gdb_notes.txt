@@ -1,3 +1,10 @@
+--- load .gdbinit from current working directory (two options):
+-------1) on start-up:
+$ gdb -iex "set auto-load safe-path ./.gdbinit" <ELF_FILE>
+-------2) modify $HOME/.gdbinit:
+$ set auto-load safe-path <PATH_TO_WORKSPACE>
+
+
 ---dynamic disassembly / instruction trace:
 $ gdb <ELF_FILE>
 (gdb) info files                # get entry point of binary
@@ -13,4 +20,5 @@ $ gdb <ELF_FILE>
 
 ---dynamic disassembly - filter output from gdb:
 $ grep -E '=> 0x[0-9a-f]+:' gdb.txt 
+
 
