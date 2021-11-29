@@ -5,3 +5,9 @@ layout src
 define hook-next
   refresh
 end
+
+
+#break *<FUNC+OFFSET>
+
+#----allows for loading .gdbinit from current dir
+#set auto-load safe-path /
