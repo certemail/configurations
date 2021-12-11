@@ -17,7 +17,11 @@ end
 #  x/16xw $esp
 #end
 
+#---example breakpoint
 #break *<FUNC+OFFSET>
 
 #----allows for loading .gdbinit from current dir
 #set auto-load safe-path /
+
+#----EXAMPLE TO RUN W/ LOCAL GDB COMMAND FILE:
+# gdb <PROG> -x ./<LOCAL_GDB_CMDS.TXT>
