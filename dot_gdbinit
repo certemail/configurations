@@ -2,10 +2,20 @@ set disassembly-flavor intel
 set history save on
 layout src 
 
+#----refresh screen after every step (when using TUI)
 define hook-next
   refresh
 end
 
+#----do not prompt "y" when quitting 
+define hook-quit
+  set confirm off
+end
+
+#----print stack after every "next" cmd (TODO - hook next-instruction)
+#define hook-next
+#  x/16xw $esp
+#end
 
 #break *<FUNC+OFFSET>
 
